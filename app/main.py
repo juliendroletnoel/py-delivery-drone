@@ -7,10 +7,14 @@ class BaseRobot (object):
     def __init__(self,
                  name: str,
                  weight: int,
-                 coords: list[int] = [0, 0]) -> None:
+                 coords: list[int] = None) -> None: # type: ignore
         self.name = name
         self.weight = weight
-        self.coords = coords
+        
+        if self.coords is None:
+            self.coords = [0, 0]
+        else:
+            self.coords = coords
 
     def go_forward(self,
                    step: int = 1) -> None:
