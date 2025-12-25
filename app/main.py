@@ -1,3 +1,5 @@
+from typing import Optional
+
 class Cargo:
     def __init__(self, weight: int) -> None:
         self.weight = weight
@@ -7,14 +9,10 @@ class BaseRobot (object):
     def __init__(self,
                  name: str,
                  weight: int,
-                 coords: list[int] = None) -> None:
+                 coords: Optional[list[int]] = None) -> None:
         self.name = name
         self.weight = weight
-
-        if self.coords is None:
-            self.coords = [0, 0]
-        else:
-            self.coords = coords
+        self.coords = [0, 0] if coords is None else coords
 
     def go_forward(self,
                    step: int = 1) -> None:
@@ -40,14 +38,11 @@ class FlyingRobot(BaseRobot):
     def __init__(self,
                  name: str,
                  weight: int,
-                 coords: list[int] = None) -> None:
+                 coords: Optional[list[int]] = None) -> None:
 
         super().__init__(name=name,
                          weight=weight,
-                         coords=coords)
-
-        if self.coords is None:
-            self.coords = [0, 0, 0]
+                         coords=[0, 0, 0] if coords is None else coords)
 
     def go_up(self,
               step: int = 1) -> None:
@@ -63,8 +58,9 @@ class DeliveryDrone(FlyingRobot):
                  name: str,
                  weight: int,
                  max_load_weight: int,
-                 current_load: Cargo = None,
-                 coords: list[int] = None) -> None:
+                 current_load: Optional[Cargo] = None,
+                 coords: Optional[list[int]] = None) -> None:
+
         super().__init__(name=name,
                          weight=weight,
                          coords=coords)
@@ -74,8 +70,10 @@ class DeliveryDrone(FlyingRobot):
         self.hook_load(current_load)
 
     def hook_load(self,
-                  current_load: Cargo) -> None:
+                  current_load: Optional[Cargo]) -> None:
         if self.current_load is not None:
+            return
+        if current_load is None:
             return
         if self.max_load_weight < current_load.weight:
             return
